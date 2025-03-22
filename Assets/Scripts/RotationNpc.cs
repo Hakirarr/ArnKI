@@ -1,33 +1,27 @@
 using UnityEngine;
 
-public class NPC : MonoBehaviour
+public class RotationNpc : MonoBehaviour
 {
-    public GameObject CanYel;
     public Transform playerTransform;
     private Quaternion initialRotation;
+    public NPC Phere;
+
     void Start()
     {
-        CanYel.SetActive(false);
         initialRotation = transform.rotation;
     }
 
-    void OnTriggerEnter(Collider other)
+    void Update()
     {
-        if (other.CompareTag("Player"))
+        if (Phere)
         {
-            CanYel.SetActive(true);
             Vector3 direction = playerTransform.position - transform.position;
-            direction.y = 0; // Optionnel : ignore la rotation verticale
+            direction.y = 0;
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 2f);
         }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
+        else
         {
-            CanYel.SetActive(false);
             transform.rotation = Quaternion.Slerp(transform.rotation, initialRotation, Time.deltaTime * 2f);
         }
     }
