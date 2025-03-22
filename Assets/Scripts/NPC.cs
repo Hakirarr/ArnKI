@@ -3,12 +3,11 @@ using UnityEngine;
 public class NPC : MonoBehaviour
 {
     public GameObject CanYel;
-    public Transform playerTransform;
-    private Quaternion initialRotation;
+    public bool Phere;
     void Start()
     {
         CanYel.SetActive(false);
-        initialRotation = transform.rotation;
+        Phere = false;
     }
 
     void OnTriggerEnter(Collider other)
@@ -16,10 +15,7 @@ public class NPC : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             CanYel.SetActive(true);
-            Vector3 direction = playerTransform.position - transform.position;
-            direction.y = 0; // Optionnel : ignore la rotation verticale
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 2f);
+            Phere = true;
         }
     }
 
@@ -28,7 +24,7 @@ public class NPC : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             CanYel.SetActive(false);
-            transform.rotation = Quaternion.Slerp(transform.rotation, initialRotation, Time.deltaTime * 2f);
+            Phere = false;
         }
     }
 }
